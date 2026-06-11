@@ -21,7 +21,7 @@ def ler_entrada(caminho):
     if not os.path.exists(caminho):
         print(f"Arquivo de testes '{caminho}' não foi encontrado.")
         return
-    
+
     linhas = []
 
     with open(caminho) as arq:
@@ -32,40 +32,40 @@ def ler_entrada(caminho):
 
 def interpretar_entrada(caminho):
     lst_linhas = ler_entrada(caminho)
-    
+
     if not lst_linhas:
         return None
-    
+
     dados = []
     endereco_inicial = None
     instrucoes = []
-    
+
     secao_atual = 0
-    
+
     for linha in lst_linhas:
         linha = linha.strip()
-        
+
         if not linha or linha.startswith('#'):
             if linha.startswith('#'):
                 continue
             secao_atual += 1
             continue
-        
+
         if secao_atual == 0:
             try:
                 dados.append(int(linha, 0))
             except ValueError:
                 print(f"Erro ao interpretar dado: {linha}")
-        
+
         elif secao_atual == 1:
             try:
                 endereco_inicial = hex_para_indice(linha)
             except ValueError:
                 print(f"Erro ao interpretar endereço: {linha}")
-        
+
         elif secao_atual == 2:
             instrucoes.append(linha)
-    
+
     return {
         'dados': dados,
         'endereco_inicial': endereco_inicial,
@@ -74,16 +74,16 @@ def interpretar_entrada(caminho):
 
 def main():
     programa = interpretar_entrada("teste.txt")
-    
+
     if programa is None:
         return
-    
+
     for i, valor in enumerate(programa['dados']):
         memoria_ram[i] = valor
 
     registradores['PC'] = programa['endereco_inicial']
 
-    #ciclo de busca:
+    # ciclo de busca:
     registradores['MAR'] = registradores['PC']
     registradores['MBR'] = memoria_ram[registradores['MAR']]
     registradores['IR'] = registradores['MBR']
