@@ -1,44 +1,80 @@
-memoria_ram = [0] * 256
+from memoria import registradores, memoria_ram
 
-registradores = {
-    'A': 0, 'B': 0,
-    'PC': 0, 'IR': '',
-    'MAR': 0, 'MBR': 0,
-    'AC': 0, 'M': 0, 'R': 0,
-    'C': 0, 'N': 0, 'Z': 0
-}
+def atualizar_flags(valor):
+  registradores['Z'] = 1 if valor == 0 else 0
+  registradores['N'] = 1 if valor < 0 else 0
+
+def endereco_para_inteiro(endereco):
+  if isinstance(endereco, int):
+        return endereco
+
+  # Transforma M(x) em x
+  endereco = endereco.strip().replace('M(', '').replace(')', '')
+  return int(endereco, 0)
 
 def executar_load(endereco):
-    registradores["AC"] = memoria_ram[endereco]
-    
-def executar_store(endereco):
-    memoria_ram[endereco] = registradores["AC"]
-
-def executar_add(endereco):
-    registradores["AC"] += memoria_ram[endereco]
-
-def executar_sub(endereco):
-    registradores["AC"] -= memoria_ram[endereco]
-    
-def executar_mult(endereco):
-    registradores["AC"] *= memoria_ram[endereco]
-
-def executar_jump(endereco):
-    registradores["PC"] = endereco
-
-def executar_jump_positivo(endereco):
-    if registradores["AC"] > 0:
-        registradores["PC"] = endereco
-
-def executar_move(destino, origem):
-    registradores[destino] = registradores[origem]
+    # AC ← MEM[X]
+    registradores['MAR'] = endereco_para_inteiro(endereco)
+    registradores['MBR'] = memoria_ram[registradores['MAR']]
+    registradores['AC'] = registradores['MBR']
+    atualizar_flags(registradores['AC'])
 
 def executar_loadI(endereco):
-    registradores["MAR"] = endereco
+    # AC ← MEM[MEM[X]]  (indireto)
+    registradores['MAR'] = endereco_para_inteiro(endereco)
     registradores["MBR"] = memoria_ram[registradores["MAR"]]
-    registradores["AC"] = memoria_ram[registradores["MBR"]]
+    registradores['MAR'] = registradores["MBR"]
+    registradores['MBR'] = memoria_ram[registradores['MAR']]
+    registradores['AC'] = registradores['MBR']
+    atualizar_flags(registradores['AC'])
+
+def executar_store(endereco):
+    # MEM[X] ← AC
+    registradores['MAR'] = endereco_para_inteiro(endereco)
+    registradores['MBR'] = registradores['AC']
+    memoria_ram[registradores['MAR']] = registradores['MBR']
 
 def executar_storeI(endereco):
-    registradores["MAR"] = endereco
-    registradores["MBR"] = memoria_ram[registradores["MAR"]]
-    memoria_ram[registradores["MBR"]] = registradores["AC"]
+    # MEM[MEM[X]] ← AC  (indireto)
+    registradores['MAR'] = endereco_para_inteiro(endereco)
+    registradores['MBR'] = memoria_ram[registradores['MAR']]
+    registradores['MAR'] = registradores['MBR']
+    memoria_ram[registradores['MAR']] = registradores['AC']
+
+def executar_add(endereco):
+    # AC ← AC + MEM[X]
+    registradores['MAR'] = endereco_para_inteiro(endereco)
+    registradores['MBR'] = memoria_ram[registradores['MAR']]
+    resultado = registradores['AC'] + registradores['MBR']
+    registradores['C'] = 1 if resultado > 0xFFFF else 0
+    registradores['AC'] = resultado
+    atualizar_flags(registradores['AC'])
+
+def executar_sub(endereco):
+    # AC ← AC - MEM[X]
+    registradores['MAR'] = endereco_para_inteiro(endereco)
+    registradores['MBR'] = memoria_ram[registradores['MAR']]
+    registradores['AC'] = registradores['AC'] - registradores['MBR']
+    atualizar_flags(registradores['AC'])
+
+def executar_mult(endereco):
+    # M:AC ← AC * MEM[X]
+    registradores['MAR'] = endereco_para_inteiro(endereco)
+    registradores['MBR'] = memoria_ram[registradores['MAR']]
+    resultado = registradores['AC'] * registradores['MBR']
+    registradores['M'] = resultado
+    registradores['AC'] = resultado
+    atualizar_flags(registradores['AC'])
+
+def executar_jump(endereco):
+    # PC ← X
+    registradores['PC'] = endereco_para_inteiro(endereco)
+
+def executar_jump_positivo(endereco):
+    # se AC >= 0: PC ← end
+    if registradores["AC"] >= 0:
+        registradores["PC"] = endereco_para_inteiro(endereco)
+
+def executar_move(destino, origem):
+    # destino ← origem
+    registradores[destino] = registradores[origem]
