@@ -1,4 +1,5 @@
 import os
+import sys
 from memoria import registradores, memoria_ram
 from instrucoes import executar_instrucao
 
@@ -74,7 +75,12 @@ def printar_estado():
     print("\n" * 2)
 
 def main():
-    programa = interpretar_entrada("teste.txt")
+    if sys.argv[1]:
+        arquivo = sys.argv[1]
+    else:
+        print("Use 'python main.py [nome do txt]'")
+        return
+    programa = interpretar_entrada(arquivo)
 
     if programa is None:
         return

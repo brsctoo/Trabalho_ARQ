@@ -1,0 +1,21 @@
+# Dados (N, Resultado, Constante 1)
+5
+1
+1
+
+# Endereço inicial da primeira instrução
+0xA0
+
+# Instrucoes
+LOAD 0x00
+SUB 0x02
+JUMP+ 0xA4
+JUMP 0xAB
+LOAD 0x01
+MULT 0x00
+STOR 0x01
+LOAD 0x00
+SUB 0x02
+STOR 0x00
+JUMP 0xA0
+0
