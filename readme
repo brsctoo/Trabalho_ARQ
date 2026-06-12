@@ -1,0 +1,35 @@
+SIMULADOR DO CICLO DE INSTRUÇÃO - COMPUTADOR IAS
+
+1. DESCRIÇÃO
+Este projeto é um simulador de um processador baseado no ciclo de instrução
+da arquitetura IAS. O programa carrega dados e instruções de um arquivo de
+texto para a "memória RAM" e executa ciclo a ciclo (Busca e Execução),
+exibindo o estado dos registradores no terminal.
+
+2. DEPENDÊNCIAS
+- Python 3.x instalado na máquina.
+- Apenas bibliotecas padrão como 'os' e 'sys'
+
+3. COMO EXECUTAR
+O simulador é executado via linha de comando, passando o arquivo com as
+instruções como parâmetro.
+
+Abra o terminal, navegue até a pasta do projeto e digite o comando:
+> python main.py [nome_do_arquivo.txt]
+
+Exemplos de execução:
+> python main.py selectionsort.txt
+> python main.py fatorial.txt
+
+4. COMANDOS E CONTROLE
+- Durante a execução, o simulador pausará após cada instrução.
+- Pressione a tecla <ENTER> para avançar para o próximo ciclo de instrução.
+- O estado de todos os registradores (PC, MAR, MBR, IR, AC, M, R e Flags)
+  será impresso na tela a cada passo para facilitar a visualização e os testes.
+
+5. ARQUIVOS DE ENTRADA
+Os arquivos de texto (ex: fatorial.txt) devem seguir estritamente o formato:
+- 1ª Seção: Valores inteiros de dados (separados por quebra de linha)
+- 2ª Seção: Endereço hexadecimal inicial (ex: 0xA0)
+- 3ª Seção: Instruções em Assembly (ex: LOAD 0x00)
+- Separe as seções com linhas em branco ou comentários (#).
