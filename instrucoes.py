@@ -85,7 +85,7 @@ def executar_jump(endereco):
 
 def executar_jump_positivo(endereco):
     # se AC >= 0: PC ← end
-    if registradores["AC"] > 0:
+    if registradores["AC"] >= 0:
         registradores["PC"] = endereco_para_inteiro(endereco)
 
 def executar_move(destino, origem):
