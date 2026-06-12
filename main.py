@@ -106,7 +106,7 @@ def main():
         # Captura o conteúdo bruto da memória primeiro
         conteudo_ram = memoria_ram[registradores['MAR']]
 
-        # CRÍTICO: Verifica a condição de paragem ANTES de tratar como instrução
+        # Verifica a condição de paragem ANTES de tratar como instrução
         if conteudo_ram == 0 or conteudo_ram == "" or conteudo_ram is None:
             print("Fim do programa.")
             flag = False
