@@ -66,6 +66,17 @@ def executar_mult(endereco):
     registradores['AC'] = resultado
     atualizar_flags(registradores['AC'])
 
+def executar_div(endereco):
+    # AC ← AC / MEM[X], R ← resto
+    registradores['MAR'] = endereco_para_inteiro(endereco)
+    registradores['MBR'] = memoria_ram[registradores['MAR']]
+    if registradores['MBR'] == 0:
+        print("Erro: divisão por zero.")
+        return
+    registradores['R'] = registradores['AC'] % registradores['MBR']
+    registradores['AC'] = registradores['AC'] // registradores['MBR']
+    atualizar_flags(registradores['AC'])
+
 def executar_jump(endereco):
     # PC ← X
     registradores['PC'] = endereco_para_inteiro(endereco)
