@@ -88,7 +88,7 @@ def main():
         return
 
     for i, valor in enumerate(programa['dados']):
-        memoria_ram[i] = valor
+        memoria_ram[0x100 + i] = valor
 
     addr_instrucao = programa['endereco_inicial'] 
     for instrucao in programa['instrucoes']:
@@ -120,7 +120,7 @@ def main():
         #Execucao:
         executar_instrucao(instrucao_atual)
         printar_estado()
-        input("Pressione ENTER para continuar...")
+        # input("Pressione ENTER para continuar...")
         
 
 
