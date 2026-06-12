@@ -33,6 +33,7 @@ def executar_store(endereco):
     registradores['MAR'] = endereco_para_inteiro(endereco)
     registradores['MBR'] = registradores['AC']
     memoria_ram[registradores['MAR']] = registradores['MBR']
+    atualizar_flags(registradores['AC'])
 
 def executar_storeI(endereco):
     # MEM[MEM[X]] ← AC  (indireto)
@@ -40,6 +41,7 @@ def executar_storeI(endereco):
     registradores['MBR'] = memoria_ram[registradores['MAR']]
     registradores['MAR'] = registradores['MBR']
     memoria_ram[registradores['MAR']] = registradores['AC']
+    atualizar_flags(registradores['AC'])
 
 def executar_add(endereco):
     # AC ← AC + MEM[X]
@@ -108,6 +110,8 @@ def executar_instrucao(instrucao: str):
         executar_sub(partes[1])
     elif operacao == 'MULT':
         executar_mult(partes[1])
+    elif operacao == 'DIV':
+        executar_div(partes[1])
     elif operacao == 'JUMP':
         executar_jump(partes[1])
     elif operacao == 'JUMP+':
