@@ -1,4 +1,4 @@
-memoria_ram = [0] * 512
+memoria_ram = [0] * 256
 
 registradores = {
     'A': 0, 'B': 0,
