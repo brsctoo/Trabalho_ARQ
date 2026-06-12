@@ -84,8 +84,8 @@ def executar_storeI(endereco):
 # INSTRUÇÕES ARITMÉTICAS (TODAS OPERAM NO AC) =============
 def executar_add(partes):
     """
-    ADD M(x)        -> AC <- AC + MEM[x]
-    ADD A, M(x)     -> A  <- A  + MEM[x]
+    ADD M(x): AC <- AC + MEM[x]
+    ADD A, M(x): A  <- A  + MEM[x]
     """
     reg, endereco = parse_reg_e_endereco(partes)
     registradores['MAR'] = endereco_para_inteiro(endereco)
@@ -97,8 +97,8 @@ def executar_add(partes):
 
 def executar_sub(partes):
     """
-    SUB M(x)        -> AC <- AC - MEM[x]
-    SUB A, M(x)     -> A  <- A  - MEM[x]
+    SUB M(x): AC <- AC - MEM[x]
+    SUB A, M(x): A  <- A  - MEM[x]
     """
     reg, endereco = parse_reg_e_endereco(partes)
     registradores['MAR'] = endereco_para_inteiro(endereco)
@@ -108,8 +108,8 @@ def executar_sub(partes):
 
 def executar_mult(partes):
     """
-    MULT M(x)       -> M:AC <- AC * MEM[x]
-    MULT A, M(x)    -> M:A  <- A  * MEM[x]   (M guarda parte alta)
+    MULT M(x): M:AC <- AC * MEM[x]
+    MULT A, M(x): M:A  <- A  * MEM[x]
     """
     reg, endereco = parse_reg_e_endereco(partes)
     registradores['MAR'] = endereco_para_inteiro(endereco)
@@ -121,8 +121,8 @@ def executar_mult(partes):
 
 def executar_div(partes):
     """
-    DIV M(x)        -> AC <- AC / MEM[x],  R <- resto
-    DIV A, M(x)     -> A  <- A  / MEM[x],  R <- resto
+    DIV M(x): AC <- AC / MEM[x],  R <- resto
+    DIV A, M(x): A  <- A  / MEM[x],  R <- resto
     """
     reg, endereco = parse_reg_e_endereco(partes)
     registradores['MAR'] = endereco_para_inteiro(endereco)
