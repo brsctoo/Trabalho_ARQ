@@ -23,7 +23,6 @@ Exemplos de execução:
 
 4. COMANDOS E CONTROLE
 - Durante a execução, o simulador pausará após cada instrução.
-- Pressione a tecla <ENTER> para avançar para o próximo ciclo de instrução.
 - O estado de todos os registradores (PC, MAR, MBR, IR, AC, M, R e Flags)
   será impresso na tela a cada passo para facilitar a visualização e os testes.
 
