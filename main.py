@@ -40,12 +40,6 @@ def interpretar_entrada(caminho):
         if linha.startswith('#'):
             continue
 
-#        if not linha or linha.startswith('#'):
-#            if linha.startswith('#'):
-#                continue
-#            secao_atual += 1
-#            continue
-
         if secao_atual == 0:
             try:
                 dados.append(int(linha, 0))
@@ -69,8 +63,11 @@ def interpretar_entrada(caminho):
 
 def printar_estado():
     ''' Imprime o estado dos regs e da memória para debug '''
+    mbr = registradores['MBR']
+    mbr_str = indice_para_hex(mbr) if isinstance(mbr, int) else str(mbr)
+
     print(f"\nPC: {indice_para_hex(registradores['PC'])} | MAR: {indice_para_hex(registradores['MAR'])}")
-    print(f"IR: {registradores['IR']} | MBR: {indice_para_hex(registradores['MBR'])}")
+    print(f"IR: {registradores['IR']} | MBR: {mbr_str}")
     print(f"A: {registradores['A']} | B: {registradores['B']}")
     print(f"AC: {registradores['AC']}" f" | M: {registradores['M']} | R: {registradores['R']}")
     print(f"C: {registradores['C']} | N: {registradores['N']} | Z: {registradores['Z']}")
@@ -88,41 +85,44 @@ def main():
         return
 
     for i, valor in enumerate(programa['dados']):
-        memoria_ram[i] = valor
+        memoria_ram[0x100 + i] = valor
 
-    addr_instrucao = programa['endereco_inicial'] 
+    addr_instrucao = programa['endereco_inicial']
     for instrucao in programa['instrucoes']:
         memoria_ram[addr_instrucao] = instrucao
-        addr_instrucao +=1
-    
+        addr_instrucao += 1
+
     registradores['PC'] = programa['endereco_inicial']
 
     print("Estado Inicial:")
     printar_estado()
-    
+
     flag = True
     while flag:
 
         # ciclo de busca:
         registradores['MAR'] = registradores['PC']
+
+        # Captura o conteúdo bruto da memória primeiro
+        conteudo_ram = memoria_ram[registradores['MAR']]
+
+        # CRÍTICO: Verifica a condição de paragem ANTES de tratar como instrução
+        if conteudo_ram == 0 or conteudo_ram == "" or conteudo_ram is None:
+            print("Fim do programa.")
+            flag = False
+            continue
+
         registradores['MBR'] = memoria_ram[registradores['MAR']]
         registradores['IR'] = registradores['MBR']
         registradores['PC'] += 1
 
         instrucao_atual = registradores['IR']
-        if instrucao_atual == 0 or instrucao_atual == "":
-            print("Fim do programa.")
-            flag = False
-            continue
-    
         print(f"Instrução a ser executada: {instrucao_atual}")
 
         #Execucao:
         executar_instrucao(instrucao_atual)
         printar_estado()
         input("Pressione ENTER para continuar...")
-        
-
 
     #debug
     printar_estado()
